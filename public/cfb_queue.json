@@ -1,4 +1,752 @@
 {
-  "generatedAt": "2025-09-09T14:15:07.689Z",
-  "posts": []
+  "generatedAt": "2025-09-09T14:47:22.102Z",
+  "posts": [
+    {
+      "id": "final_401754528",
+      "kind": "final",
+      "priority": 60,
+      "text": "James Madison Dukes 14 at Louisville Cardinals 28 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754528",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752817",
+      "kind": "final",
+      "priority": 70,
+      "text": "Western Illinois Leathernecks 7 at Northwestern Wildcats 42 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752817",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752826",
+      "kind": "final",
+      "priority": 60,
+      "text": "Northern Illinois Huskies 9 at Maryland Terrapins 20 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752826",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401760363",
+      "kind": "final",
+      "priority": 70,
+      "text": "Eastern Washington Eagles 14 at Boise State Broncos 51 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401760363",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752815",
+      "kind": "final",
+      "priority": 70,
+      "text": "Grambling Tigers 0 at #1 Ohio State Buckeyes 70 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752815",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752811",
+      "kind": "final",
+      "priority": 70,
+      "text": "Florida International Panthers 0 at #2 Penn State Nittany Lions 34 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752811",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752687",
+      "kind": "final",
+      "priority": 60,
+      "text": "Louisiana Tech Bulldogs 7 at #3 LSU Tigers 23 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752687",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752685",
+      "kind": "final",
+      "priority": 60,
+      "text": "Austin Peay Governors 6 at #4 Georgia Bulldogs 28 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752685",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754641",
+      "kind": "final",
+      "priority": 70,
+      "text": "Bethune-Cookman Wildcats 3 at #5 Miami Hurricanes 45 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754641",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752824",
+      "kind": "final",
+      "priority": 70,
+      "text": "Oklahoma State Cowboys 3 at #6 Oregon Ducks 69 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752824",
+      "expiresAt": "2025-09-11T02:47:22.807Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752693",
+      "kind": "final",
+      "priority": 70,
+      "text": "San José State Spartans 7 at #7 Texas Longhorns 38 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752693",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754637",
+      "kind": "final",
+      "priority": 60,
+      "text": "Troy Trojans 16 at #8 Clemson Tigers 27 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754637",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752691",
+      "kind": "final",
+      "priority": 60,
+      "text": "South Carolina State Bulldogs 10 at #10 South Carolina Gamecocks 38 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752691",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752825",
+      "kind": "final",
+      "priority": 60,
+      "text": "#11 Illinois Fighting Illini 45 at Duke Blue Devils 19 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752825",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752688",
+      "kind": "final",
+      "priority": 90,
+      "text": "#12 Arizona State Sun Devils 20 at Mississippi State Bulldogs 24 — Final. Upset #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752688",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752684",
+      "kind": "final",
+      "priority": 90,
+      "text": "South Florida Bulls 18 at #13 Florida Gators 16 — Final. Upset #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752684",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754621",
+      "kind": "final",
+      "priority": 70,
+      "text": "East Texas A&M Lions 3 at #14 Florida State Seminoles 77 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754621",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752690",
+      "kind": "final",
+      "priority": 60,
+      "text": "#15 Michigan Wolverines 13 at #18 Oklahoma Sooners 24 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752690",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752822",
+      "kind": "final",
+      "priority": 60,
+      "text": "Iowa Hawkeyes 13 at #16 Iowa State Cyclones 16 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752822",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754525",
+      "kind": "final",
+      "priority": 90,
+      "text": "Baylor Bears 48 at #17 SMU Mustangs 45 — Final/2OT. Upset #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754525",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752694",
+      "kind": "final",
+      "priority": 60,
+      "text": "Utah State Aggies 22 at #19 Texas A&M Aggies 44 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752694",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752686",
+      "kind": "final",
+      "priority": 60,
+      "text": "#20 Ole Miss Rebels 30 at Kentucky Wildcats 23 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752686",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752681",
+      "kind": "final",
+      "priority": 70,
+      "text": "UL Monroe Warhawks 0 at #21 Alabama Crimson Tide 73 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752681",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752692",
+      "kind": "final",
+      "priority": 70,
+      "text": "East Tennessee State Buccaneers 17 at #22 Tennessee Volunteers 72 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752692",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752812",
+      "kind": "final",
+      "priority": 70,
+      "text": "Kennesaw State Owls 9 at #23 Indiana Hoosiers 56 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752812",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401756885",
+      "kind": "final",
+      "priority": 70,
+      "text": "Kent State Golden Flashes 14 at #24 Texas Tech Red Raiders 62 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401756885",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401756887",
+      "kind": "final",
+      "priority": 70,
+      "text": "Cal Poly Mustangs 9 at #25 Utah Utes 63 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401756887",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752813",
+      "kind": "final",
+      "priority": 70,
+      "text": "Northwestern State Demons 0 at Minnesota Golden Gophers 66 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752813",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754524",
+      "kind": "final",
+      "priority": 60,
+      "text": "Virginia Cavaliers 31 at NC State Wolfpack 35 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754524",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754529",
+      "kind": "final",
+      "priority": 60,
+      "text": "Central Michigan Chippewas 17 at Pittsburgh Panthers 45 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754529",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754618",
+      "kind": "final",
+      "priority": 60,
+      "text": "UConn Huskies 20 at Syracuse Orange 27 — Final/OT.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754618",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401757227",
+      "kind": "final",
+      "priority": 60,
+      "text": "Liberty Flames 24 at Jacksonville State Gamecocks 34 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401757227",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401762462",
+      "kind": "final",
+      "priority": 70,
+      "text": "Howard Bison 7 at Temple Owls 55 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401762462",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401760366",
+      "kind": "final",
+      "priority": 60,
+      "text": "Idaho State Bengals 22 at New Mexico Lobos 32 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401760366",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752689",
+      "kind": "final",
+      "priority": 60,
+      "text": "Kansas Jayhawks 31 at Missouri Tigers 42 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752689",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752937",
+      "kind": "final",
+      "priority": 60,
+      "text": "Fresno State Bulldogs 36 at Oregon State Beavers 27 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752937",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754622",
+      "kind": "final",
+      "priority": 70,
+      "text": "Gardner-Webb Runnin' Bulldogs 12 at Georgia Tech Yellow Jackets 59 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754622",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401756880",
+      "kind": "final",
+      "priority": 60,
+      "text": "Bowling Green Falcons 20 at Cincinnati Bearcats 34 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401756880",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401756881",
+      "kind": "final",
+      "priority": 60,
+      "text": "Delaware Blue Hens 7 at Colorado Buffaloes 31 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401756881",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401761596",
+      "kind": "final",
+      "priority": 60,
+      "text": "Lindenwood Lions 13 at App State Mountaineers 20 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401761596",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401761603",
+      "kind": "final",
+      "priority": 60,
+      "text": "Texas State Bobcats 43 at UTSA Roadrunners 36 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401761603",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401762458",
+      "kind": "final",
+      "priority": 60,
+      "text": "UAB Blazers 24 at Navy Midshipmen 38 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401762458",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401762461",
+      "kind": "final",
+      "priority": 60,
+      "text": "North Texas Mean Green 33 at Western Michigan Broncos 30 — Final/OT.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401762461",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401762794",
+      "kind": "final",
+      "priority": 70,
+      "text": "Saint Francis Red Flash 6 at Buffalo Bulls 45 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401762794",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752820",
+      "kind": "final",
+      "priority": 70,
+      "text": "Middle Tennessee Blue Raiders 10 at Wisconsin Badgers 42 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752820",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401756883",
+      "kind": "final",
+      "priority": 60,
+      "text": "West Virginia Mountaineers 10 at Ohio Bobcats 17 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401756883",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401760367",
+      "kind": "final",
+      "priority": 60,
+      "text": "Northern Iowa Panthers 7 at Wyoming Cowboys 31 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401760367",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754620",
+      "kind": "final",
+      "priority": 70,
+      "text": "Western Carolina Catamounts 10 at Wake Forest Demon Deacons 42 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754620",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752818",
+      "kind": "final",
+      "priority": 60,
+      "text": "Miami (OH) RedHawks 17 at Rutgers Scarlet Knights 45 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752818",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752682",
+      "kind": "final",
+      "priority": 70,
+      "text": "Arkansas State Red Wolves 14 at Arkansas Razorbacks 56 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752682",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401760365",
+      "kind": "final",
+      "priority": 60,
+      "text": "Sacramento State Hornets 17 at Nevada Wolf Pack 20 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401760365",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401761602",
+      "kind": "final",
+      "priority": 60,
+      "text": "Jackson State Tigers 20 at Southern Miss Golden Eagles 38 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401761602",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401762816",
+      "kind": "final",
+      "priority": 60,
+      "text": "Bryant Bulldogs 27 at Massachusetts Minutemen 26 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401762816",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754530",
+      "kind": "final",
+      "priority": 70,
+      "text": "Texas Southern Tigers 3 at California Golden Bears 35 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754530",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401757228",
+      "kind": "final",
+      "priority": 60,
+      "text": "Missouri State Bears 21 at Marshall Thundering Herd 20 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401757228",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401761599",
+      "kind": "final",
+      "priority": 70,
+      "text": "North Carolina Central Eagles 6 at Old Dominion Monarchs 54 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401761599",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401762459",
+      "kind": "final",
+      "priority": 70,
+      "text": "Campbell Fighting Camels 3 at East Carolina Pirates 56 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401762459",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401762460",
+      "kind": "final",
+      "priority": 70,
+      "text": "Florida A&M Rattlers 14 at Florida Atlantic Owls 56 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401762460",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754527",
+      "kind": "final",
+      "priority": 60,
+      "text": "North Carolina Tar Heels 20 at Charlotte 49ers 3 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754527",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401756882",
+      "kind": "final",
+      "priority": 60,
+      "text": "Army Black Knights 24 at Kansas State Wildcats 21 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401756882",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401756884",
+      "kind": "final",
+      "priority": 60,
+      "text": "Houston Cougars 35 at Rice Owls 9 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401756884",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401756886",
+      "kind": "final",
+      "priority": 70,
+      "text": "North Carolina A&T Aggies 7 at UCF Knights 68 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401756886",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401757232",
+      "kind": "final",
+      "priority": 60,
+      "text": "Western Kentucky Hilltoppers 21 at Toledo Rockets 45 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401757232",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401760364",
+      "kind": "final",
+      "priority": 60,
+      "text": "Northern Colorado Bears 17 at Colorado State Rams 21 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401760364",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401761598",
+      "kind": "final",
+      "priority": 60,
+      "text": "Memphis Tigers 38 at Georgia State Panthers 16 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401761598",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401761601",
+      "kind": "final",
+      "priority": 60,
+      "text": "Tulane Green Wave 33 at South Alabama Jaguars 31 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401761601",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401762795",
+      "kind": "final",
+      "priority": 60,
+      "text": "Long Island University Sharks 28 at Eastern Michigan Eagles 23 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401762795",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752683",
+      "kind": "final",
+      "priority": 70,
+      "text": "Ball State Cardinals 3 at Auburn Tigers 42 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752683",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752695",
+      "kind": "final",
+      "priority": 60,
+      "text": "Vanderbilt Commodores 44 at Virginia Tech Hokies 20 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752695",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752810",
+      "kind": "final",
+      "priority": 70,
+      "text": "Akron Zips 0 at Nebraska Cornhuskers 68 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752810",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752814",
+      "kind": "final",
+      "priority": 70,
+      "text": "Georgia Southern Eagles 20 at USC Trojans 59 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752814",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752816",
+      "kind": "final",
+      "priority": 60,
+      "text": "Boston College Eagles 40 at Michigan State Spartans 42 — Final/2OT.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752816",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752819",
+      "kind": "final",
+      "priority": 60,
+      "text": "Southern Illinois Salukis 17 at Purdue Boilermakers 34 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752819",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401761597",
+      "kind": "final",
+      "priority": 60,
+      "text": "Charleston Southern Buccaneers 0 at Coastal Carolina Chanticleers 13 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401761597",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752823",
+      "kind": "final",
+      "priority": 60,
+      "text": "UCLA Bruins 23 at UNLV Rebels 30 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752823",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401761600",
+      "kind": "final",
+      "priority": 60,
+      "text": "McNeese Cowboys 10 at Louisiana Ragin' Cajuns 34 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401761600",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401757229",
+      "kind": "final",
+      "priority": 60,
+      "text": "Tulsa Golden Hurricane 14 at New Mexico State Aggies 21 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401757229",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401757231",
+      "kind": "final",
+      "priority": 60,
+      "text": "UT Martin Skyhawks 17 at UTEP Miners 42 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401757231",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401756879",
+      "kind": "final",
+      "priority": 70,
+      "text": "Weber State Wildcats 3 at Arizona Wildcats 48 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401756879",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752948",
+      "kind": "final",
+      "priority": 60,
+      "text": "San Diego State Aztecs 13 at Washington State Cougars 36 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752948",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401754526",
+      "kind": "final",
+      "priority": 60,
+      "text": "Stanford Cardinal 3 at BYU Cougars 27 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754526",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401752821",
+      "kind": "final",
+      "priority": 70,
+      "text": "UC Davis Aggies 10 at Washington Huskies 70 — Final. Blowout #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401752821",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    },
+    {
+      "id": "final_401757230",
+      "kind": "final",
+      "priority": 60,
+      "text": "Sam Houston Bearkats 20 at Hawai'i Rainbow Warriors 37 — Final.  #CFB",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401757230",
+      "expiresAt": "2025-09-11T02:47:22.808Z",
+      "source": "espn"
+    }
+  ]
 }
