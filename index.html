@@ -4,42 +4,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>CFB Content Queue</title>
 <style>
-  :root { --muted:#6b7280; --b:#e5e7eb; }
-  body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:920px;margin:32px auto;padding:0 16px}
-  header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
-  h1{font-size:22px;margin:0}
-  .controls{display:flex;gap:8px;align-items:center}
-  .muted{color:var(--muted);font-size:12px}
-  .post{border:1px solid var(--b);border-radius:12px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start}
-  .meta{font-size:12px;color:var(--muted)}
+  body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:800px;margin:32px auto;padding:0 16px}
+  header{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+  .post{border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start}
+  .meta{font-size:12px;color:#6b7280}
   button{padding:6px 10px;border-radius:8px;border:1px solid #d1d5db;background:#fff;cursor:pointer}
   button:hover{background:#f9fafb}
-  input[type="checkbox"]{transform:translateY(2px)}
 </style>
-
 <header>
-  <h1>CFB Content Queue</h1>
-  <div class="controls">
-    <label class="muted"><input id="onlyUpsets" type="checkbox"> Only upsets/high-priority</label>
-    <button id="refresh">Refresh</button>
-  </div>
+  <h1 style="margin:0">CFB Content Queue</h1>
+  <small id="ts" class="meta"></small>
+  <button id="refresh">Refresh</button>
 </header>
-<div class="muted" id="stamp">loading…</div>
 <div id="list">Loading…</div>
 
 <script>
-const QUEUE_URL = "/botcfb/public/cfb_queue.json?v=" + Date.now();
-
 async function load() {
   const list = document.getElementById("list");
   list.textContent = "Loading…";
   try {
-    const r = await fetch(QUEUE_URL, { cache: "no-store" });
-    if (!r.ok) throw new Error("Queue not found");
-    const data = await r.json();
+    // IMPORTANT: include repo name in the path for GitHub Pages
+    const url = "/botcfb/public/cfb_queue.json?v=" + Date.now();
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.status + " " + res.statusText);
+    const data = await res.json();
 
-    document.getElementById("stamp").textContent =
-      `generated ${new Date(data.generatedAt).toLocaleString()} • ${data.posts?.length||0} items`;
+    document.getElementById("ts").textContent =
+      `generated ${new Date(data.generatedAt).toLocaleString()}`;
 
-    let posts = Array.isArray(data.posts) ? data.posts : [];
-    co
+    list.innerHTML = "";
+    if (!data.posts?.length) {
+      list.textContent = "No posts in queue.";
+      return;
+    }
+    for (const p of data.posts) {
+      const el = document.createElement("div");
+      el.className = "post";
+      el.innerHTML = `
+        <div style="flex:1">
+          <div>${(p.text||"").replace(/</g,"&lt;")}</div>
+          <div class="meta">${p.kind} • priority ${p.priority}${p.link ? ` • <a href="${p.link}" target="_blank">boxscore</a>` : ""}</div>
+        </div>
+        <div><button>Copy</button></div>`;
+      el.querySelector("button").onclick = async () => {
+        await navigator.clipboard.writeText(p.text);
+        el.querySelector("button").textContent = "Copied";
+        setTimeout(()=>el.querySelector("button").textContent="Copy",900);
+      };
+      list.appendChild(el);
+    }
+  } catch (err) {
+    list.textContent = "Could not load queue: " + err.messag
