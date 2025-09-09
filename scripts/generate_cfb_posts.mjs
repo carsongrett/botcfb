@@ -52,6 +52,6 @@ for (const e of finals) {
 writeJson("public/cfb_queue.json", { generatedAt: nowIso, posts: drafts });
 writeJson("posted_ids.json", { ids: [...posted.ids, ...drafts.map(d => d.id)] });
 
-function readJson(p, fallback) { try { return JSON.parse(fs.readFileSync(p, "utf8")); } catch { return fallback; } }
-function writeJson(p, obj) { fs.mkdirSync(p.split("/").slice(0, -1).join("/") || ".", { recursive: true }); fs.writeFileSync(p, JSON.stringify(obj, null, 2)); }
+function readJson(p, f) { try { return JSON.parse(fs.readFileSync(p,"utf8")); } catch { return f; } }
+function writeJson(p, o) { fs.mkdirSync(p.split("/").slice(0,-1).join("/")||".",{recursive:true}); fs.writeFileSync(p, JSON.stringify(o,null,2)); }
 function fmtYMD(d){ const dt=new Date(d.getTime()-d.getTimezoneOffset()*60000); return dt.toISOString().slice(0,10).replace(/-/g,""); }
