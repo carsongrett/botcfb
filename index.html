@@ -19,13 +19,13 @@
 <div id="list">Loading…</div>
 
 <script>
+const URL = "https://carsongrett.github.io/botcfb/public/cfb_queue.json";
+
 async function load() {
   const list = document.getElementById("list");
   list.textContent = "Loading…";
   try {
-    // IMPORTANT: include repo name in the path for GitHub Pages
-    const url = "/botcfb/public/cfb_queue.json?v=" + Date.now();
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(URL + "?v=" + Date.now(), { cache: "no-store" });
     if (!res.ok) throw new Error(res.status + " " + res.statusText);
     const data = await res.json();
 
@@ -43,7 +43,9 @@ async function load() {
       el.innerHTML = `
         <div style="flex:1">
           <div>${(p.text||"").replace(/</g,"&lt;")}</div>
-          <div class="meta">${p.kind} • priority ${p.priority}${p.link ? ` • <a href="${p.link}" target="_blank">boxscore</a>` : ""}</div>
+          <div class="meta">${p.kind} • priority ${p.priority}${
+            p.link ? ` • <a href="${p.link}" target="_blank">boxscore</a>` : ""
+          }</div>
         </div>
         <div><button>Copy</button></div>`;
       el.querySelector("button").onclick = async () => {
@@ -54,4 +56,10 @@ async function load() {
       list.appendChild(el);
     }
   } catch (err) {
-    list.textContent = "Could not load queue: " + err.messag
+    list.textContent = "Could not load queue: " + err.message;
+  }
+}
+document.getElementById("refresh").onclick = load;
+load();
+</script>
+</html>
