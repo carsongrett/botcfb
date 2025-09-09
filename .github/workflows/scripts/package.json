@@ -1,0 +1,6 @@
+{
+  "name": "cfb-content-engine",
+  "private": true,
+  "type": "module",
+  "scripts": { "generate": "node scripts/generate_cfb_posts.mjs" }
+}
