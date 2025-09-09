@@ -3,9 +3,9 @@ import fs from "node:fs";
 
 // --- CONFIG ---
 const BASE = "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?groups=80";
-const LOOKBACK_DAYS = 2;
+const LOOKBACK_DAYS = 5;
 
-// --- DATE RANGE (last 2 days) ---
+// --- DATE RANGE (last 5 days) ---
 const end = fmtYMD(new Date());
 const start = fmtYMD(new Date(Date.now() - LOOKBACK_DAYS * 24 * 3600e3));
 const SCOREBOARD = `${BASE}&dates=${start}-${end}`;
