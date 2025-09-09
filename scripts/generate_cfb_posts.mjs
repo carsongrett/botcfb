@@ -122,9 +122,8 @@ for (const e of finals) {
     if (!best) return null;
     
     const teamAbbr = competitor?.team?.abbreviation || 'TEAM';
-    const pos = best.category.replace('Yards', '').toUpperCase();
     
-    return `Top (${teamAbbr}): ${pos} ${best.name} ${best.displayValue}`;
+    return `(${teamAbbr}): ${best.name} ${best.displayValue}`;
   };
   
   const awayTop = getTopPerformer(away);
