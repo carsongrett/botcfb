@@ -21,19 +21,37 @@ for (const e of finals) {
   const home = c.competitors?.find(x => x.homeAway === "home");
   if (!away || !home) continue;
 
-  const ar = away?.curatedRank?.current ?? 99;
+    const ar = away?.curatedRank?.current ?? 99;
   const hr = home?.curatedRank?.current ?? 99;
-  const rankLabel = n => (n && n <= 25 ? `#${n}` : "Unranked");
 
-  const awayWon = Number(away?.score) > Number(home?.score);
-  const upset =
-    (awayWon && ((ar === 99 && hr <= 25) || (hr - ar >= 7))) ||
-    (!awayWon && ((hr === 99 && ar <= 25) || (ar - hr >= 7)));
+  const showName = (team, rank) =>
+    rank <= 25 ? `#${rank} ${team?.team?.displayName}` : team?.team?.displayName;
+
+  const awayName = showName(away, ar);
+  const homeName = showName(home, hr);
+
+  const awayScore = Number(away?.score);
+  const homeScore = Number(home?.score);
+
+  const awayWon = awayScore > homeScore;
+  const winner = awayWon ? { name: awayName, score: awayScore, rank: ar } : { name: homeName, score: homeScore, rank: hr };
+  const loser  = awayWon ? { name: homeName, score: homeScore, rank: hr } : { name: awayName, score: awayScore, rank: ar };
+
+  const rankGap = (winner.rank <= 25 && loser.rank <= 25)
+    ? winner.rank - loser.rank
+    : (winner.rank === 99 && loser.rank <= 25 ? 99 : 0);
+
+  const isUpset = rankGap >= 4 || (winner.rank === 99 && loser.rank <= 25);
+  const isBlowout = Math.abs(winner.score - loser.score) >= 30;
 
   const detail = c?.status?.type?.detail || "Final";
-  const base =
-    `${away.team?.displayName} ${away.score} at ${home.team?.displayName} ${home.score} — ${detail}. ` +
-    `${upset ? "Upset." : ""} #CFB${upset ? " 🔥" : ""}`;
+
+  let tags = [];
+  if (isUpset) tags.push("Upset");
+  if (isBlowout) tags.push("Blowout");
+
+  const base = `${awayName} ${awayScore} at ${homeName} ${homeScore} — ${detail}. ${tags.join(" ")} #CFB`;
+
 
   const id = `final_${e.id}`;
   if (posted.ids.includes(id)) continue;
