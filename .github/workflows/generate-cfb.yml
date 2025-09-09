@@ -7,8 +7,6 @@ on:
         description: "Reset posted_ids.json to allow re-testing the same games"
         required: false
         default: "false"
-  schedule:
-    - cron: '0 * * * *' # hourly; adjust as needed
 
 permissions:
   contents: write
