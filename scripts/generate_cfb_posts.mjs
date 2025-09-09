@@ -84,7 +84,7 @@ for (const e of finals) {
 
   // --- POST TEXT ---
   const statusText = 'Final';
-  const scoreLine = `${awayName} ${awayScore} – ${homeScore} ${homeName}`;
+  const scoreLine = `${awayName} ${awayScore} @ ${homeName} ${homeScore}`;
   const base = `${scoreLine} — ${statusText}. ${hashtagParts.join(' ')}`;
 
   // --- DEDUPE ---
