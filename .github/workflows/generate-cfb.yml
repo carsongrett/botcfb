@@ -1,0 +1,49 @@
+name: Generate CFB Queue
+
+on:
+  workflow_dispatch:
+    inputs:
+      resetPosted:
+        description: "Reset posted_ids.json to allow re-testing the same games"
+        required: false
+        default: "false"
+  schedule:
+    - cron: '0 * * * *' # hourly; adjust as needed
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Optional reset of posted_ids.json
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.resetPosted == 'true' }}
+        run: |
+          echo '{"ids": []}' > posted_ids.json
+
+      - name: Generate queue JSON
+        run: |
+          node --version
+          node scripts/generate_cfb_posts.mjs
+
+      - name: Commit and push changes (if any)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/cfb_queue.json posted_ids.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update cfb_queue.json via workflow"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+
