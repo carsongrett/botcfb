@@ -82,69 +82,84 @@ for (const e of finals) {
   if (isRankedMatchup) hashtagParts.push('#RankedMatchup');
   hashtagParts.push('#CFB');
 
-  // --- TOP PERFORMERS ---
-  const getTopPerformer = (competitor, isWinner) => {
-    const leaders = competitor?.leaders || [];
-    if (!leaders.length) return null;
-    
-    // Find best leader by TDs first, then yards, then touches
-    let best = null;
-    let bestScore = { tds: 0, yards: 0, touches: 0 };
-    
-    for (const leader of leaders) {
-      const category = leader?.category?.toLowerCase();
-      if (!category || !leader?.leaders?.[0]) continue;
+  // --- TOP PERFORMERS (from boxscore data) ---
+  const getTopPerformer = async (competitor, isWinner) => {
+    try {
+      // Get boxscore URL from game links
+      const boxscoreUrl = e.links?.find(l => Array.isArray(l.rel) && l.rel.includes("boxscore"))?.href;
+      if (!boxscoreUrl) return null;
       
-      const player = leader.leaders[0];
-      const stats = player?.stats || [];
-      const name = player?.athlete?.displayName || 'Unknown';
+      // Fetch boxscore data
+      const boxscore = await (await fetch(boxscoreUrl)).json();
+      const teamId = competitor?.team?.id;
+      if (!teamId) return null;
       
-      let tds = 0, yards = 0, touches = 0;
+      // Find team's players in boxscore
+      const teamPlayers = boxscore?.boxscore?.players?.find(p => p.team?.id === teamId);
+      if (!teamPlayers?.statistics) return null;
       
-      if (category === 'passing') {
-        tds = Number(stats[3] || 0); // passing TDs
-        yards = Number(stats[1] || 0); // passing yards
-        touches = Number(stats[0] || 0); // completions
-      } else if (category === 'rushing') {
-        tds = Number(stats[2] || 0); // rushing TDs
-        yards = Number(stats[1] || 0); // rushing yards
-        touches = Number(stats[0] || 0); // carries
-      } else if (category === 'receiving') {
-        tds = Number(stats[2] || 0); // receiving TDs
-        yards = Number(stats[1] || 0); // receiving yards
-        touches = Number(stats[0] || 0); // receptions
+      let best = null;
+      let bestScore = { tds: 0, yards: 0, touches: 0 };
+      
+      // Check each stat category
+      for (const statGroup of teamPlayers.statistics) {
+        const category = statGroup?.name?.toLowerCase();
+        if (!category || !statGroup?.athletes?.length) continue;
+        
+        // Get top athlete from this category
+        const topAthlete = statGroup.athletes[0];
+        const stats = topAthlete?.stats || [];
+        const name = topAthlete?.athlete?.displayName || 'Unknown';
+        
+        let tds = 0, yards = 0, touches = 0;
+        
+        if (category === 'passing') {
+          tds = Number(stats[3] || 0); // passing TDs
+          yards = Number(stats[1] || 0); // passing yards  
+          touches = Number(stats[0] || 0); // completions
+        } else if (category === 'rushing') {
+          tds = Number(stats[2] || 0); // rushing TDs
+          yards = Number(stats[1] || 0); // rushing yards
+          touches = Number(stats[0] || 0); // carries
+        } else if (category === 'receiving') {
+          tds = Number(stats[2] || 0); // receiving TDs
+          yards = Number(stats[1] || 0); // receiving yards
+          touches = Number(stats[0] || 0); // receptions
+        }
+        
+        const score = { tds, yards, touches };
+        if (score.tds > bestScore.tds || 
+            (score.tds === bestScore.tds && score.yards > bestScore.yards) ||
+            (score.tds === bestScore.tds && score.yards === bestScore.yards && score.touches > bestScore.touches)) {
+          best = { name, category, stats: score };
+          bestScore = score;
+        }
       }
       
-      const score = { tds, yards, touches };
-      if (score.tds > bestScore.tds || 
-          (score.tds === bestScore.tds && score.yards > bestScore.yards) ||
-          (score.tds === bestScore.tds && score.yards === bestScore.yards && score.touches > bestScore.touches)) {
-        best = { name, category, stats: score };
-        bestScore = score;
+      if (!best) return null;
+      
+      const teamAbbr = competitor?.team?.abbreviation || 'TEAM';
+      const pos = best.category.toUpperCase();
+      const { tds, yards, touches } = best.stats;
+      
+      let statLine = '';
+      if (best.category === 'passing') {
+        const attempts = Number(stats[1] || 0); // attempts
+        statLine = `${touches}/${attempts}, ${yards}y, ${tds} TD`;
+      } else if (best.category === 'rushing') {
+        statLine = `${touches} CAR, ${yards}y, ${tds} TD`;
+      } else if (best.category === 'receiving') {
+        statLine = `${touches} REC, ${yards}y, ${tds} TD`;
       }
+      
+      return `Top (${teamAbbr}): ${pos} ${best.name} ${statLine}`;
+    } catch (err) {
+      return null; // Fail silently if boxscore fetch fails
     }
-    
-    if (!best) return null;
-    
-    const teamAbbr = competitor?.team?.abbreviation || 'TEAM';
-    const pos = best.category.toUpperCase();
-    const { tds, yards, touches } = best.stats;
-    
-    let statLine = '';
-    if (best.category === 'passing') {
-      const attempts = Number(stats[1] || 0); // attempts
-      statLine = `${touches}/${attempts}, ${yards}y, ${tds} TD`;
-    } else if (best.category === 'rushing') {
-      statLine = `${touches} CAR, ${yards}y, ${tds} TD`;
-    } else if (best.category === 'receiving') {
-      statLine = `${touches} REC, ${yards}y, ${tds} TD`;
-    }
-    
-    return `Top (${teamAbbr}): ${pos} ${best.name} ${statLine}`;
   };
   
-  const awayTop = getTopPerformer(away, awayWon);
-  const homeTop = getTopPerformer(home, !awayWon);
+  const awayTop = await getTopPerformer(away, awayWon);
+  const homeTop = await getTopPerformer(home, !awayWon);
 
   // --- POST TEXT ---
   const statusText = 'Final';
