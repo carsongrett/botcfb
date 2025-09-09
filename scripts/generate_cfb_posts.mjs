@@ -65,13 +65,27 @@ for (const e of finals) {
   const margin = Math.abs(winner.score - loser.score);
   const isBlowout = margin >= 30;
 
-  // --- TAGS ---
-  const tags = [];
-  if (isUpset) tags.push("Upset");
-  if (isBlowout) tags.push("Blowout");
+  // --- NEW TAGS ---
+  const loserScore = loser.score;
+  const isShutout = loserScore === 0;
+  const isNailbiter = margin <= 4;
+  const isShootout = awayScore >= 35 && homeScore >= 35;
+  const isRankedMatchup = (winner.rank <= 25) && (loser.rank <= 25);
 
-  const detail = c?.status?.type?.detail || "Final";
-  const base = `${awayName} ${awayScore} at ${homeName} ${homeScore} — ${detail}. ${tags.join(" ")} #CFB`;
+  // --- HASHTAG BLOCK (fixed order) ---
+  const hashtagParts = [];
+  if (isUpset) hashtagParts.push('#Upset');
+  if (isBlowout) hashtagParts.push('#Blowout');
+  if (isShutout) hashtagParts.push('#Shutout');
+  if (isNailbiter) hashtagParts.push('#Nailbiter');
+  if (isShootout) hashtagParts.push('#Shootout');
+  if (isRankedMatchup) hashtagParts.push('#RankedMatchup');
+  hashtagParts.push('#CFB');
+
+  // --- POST TEXT ---
+  const statusText = 'Final';
+  const scoreLine = `${awayName} ${awayScore} – ${homeScore} ${homeName}`;
+  const base = `${scoreLine} — ${statusText}. ${hashtagParts.join(' ')}`;
 
   // --- DEDUPE ---
   const id = `final_${e.id}`;
