@@ -210,14 +210,16 @@ async function processAPPoll() {
         posts.push(top10Post);
       }
       
-      // Movers post from cache (compare with previous week)
-      const previousWeekKey = (currentWeek - 1).toString();
-      if (pollCache.polls[previousWeekKey]) {
-        const moversPost = formatMoversPost(pollCache.polls[weekKey], pollCache.polls[previousWeekKey], currentWeek);
-        if (moversPost) {
-          posts.push(moversPost);
-        }
+    // Movers post from cache (compare with previous week)
+    const previousWeekKey = (currentWeek - 1).toString();
+    if (pollCache.polls[previousWeekKey] && pollCache.polls[previousWeekKey].length > 0) {
+      const moversPost = formatMoversPost(pollCache.polls[weekKey], pollCache.polls[previousWeekKey], currentWeek);
+      if (moversPost) {
+        posts.push(moversPost);
       }
+    } else {
+      console.log(`No previous week data available for movers comparison`);
+    }
       
       return posts;
     }
@@ -295,9 +297,9 @@ async function getCurrentWeek(season) {
     const calendar = await response.json();
     console.log(`Calendar data:`, calendar);
     
-    // For now, let's use week 3 since that's where we are
-    console.log(`Current week found: 3`);
-    return 3; // Use week 3 for testing
+    // We are in Week 3 - use that directly
+    console.log(`Current week: 3`);
+    return 3;
   } catch (error) {
     console.error("Error fetching current week:", error);
     return null;

@@ -6,24 +6,42 @@
 <style>
   body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:800px;margin:32px auto;padding:0 16px}
   header{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+  .tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid #e5e7eb}
+  .tab{padding:8px 16px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:#6b7280}
+  .tab.active{border-bottom-color:#3b82f6;color:#1f2937;font-weight:500}
+  .tab:hover{color:#374151}
   .post{border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start}
   .meta{font-size:12px;color:#6b7280}
   button{padding:6px 10px;border-radius:8px;border:1px solid #d1d5db;background:#fff;cursor:pointer}
   button:hover{background:#f9fafb}
+  .tab-content{display:none}
+  .tab-content.active{display:block}
 </style>
 <header>
   <h1 style="margin:0">CFB Content Queue</h1>
   <small id="ts" class="meta"></small>
   <button id="refresh">Refresh</button>
 </header>
-<div id="list">Loading…</div>
+<div class="tabs">
+  <button class="tab active" data-tab="final">Final Scores</button>
+  <button class="tab" data-tab="polls">Polls</button>
+</div>
+<div id="final-tab" class="tab-content active">
+  <div id="final-list">Loading…</div>
+</div>
+<div id="polls-tab" class="tab-content">
+  <div id="polls-list">Loading…</div>
+</div>
 
 <script>
 const URL = "https://carsongrett.github.io/botcfb/public/cfb_queue.json";
 
 async function load() {
-  const list = document.getElementById("list");
-  list.textContent = "Loading…";
+  const finalList = document.getElementById("final-list");
+  const pollsList = document.getElementById("polls-list");
+  finalList.textContent = "Loading…";
+  pollsList.textContent = "Loading…";
+  
   try {
     const res = await fetch(URL + "?v=" + Date.now(), { cache: "no-store" });
     if (!res.ok) throw new Error(res.status + " " + res.statusText);
@@ -32,33 +50,66 @@ async function load() {
     document.getElementById("ts").textContent =
       `generated ${new Date(data.generatedAt).toLocaleString()}`;
 
-    list.innerHTML = "";
-    if (!data.posts?.length) {
-      list.textContent = "No posts in queue.";
-      return;
+    // Separate posts by type
+    const finalPosts = data.posts?.filter(p => p.kind === "final") || [];
+    const pollPosts = data.posts?.filter(p => p.kind === "poll_top10" || p.kind === "poll_movers") || [];
+
+    // Render final scores
+    finalList.innerHTML = "";
+    if (!finalPosts.length) {
+      finalList.textContent = "No final score posts in queue.";
+    } else {
+      for (const p of finalPosts) {
+        finalList.appendChild(createPostElement(p));
+      }
     }
-    for (const p of data.posts) {
-      const el = document.createElement("div");
-      el.className = "post";
-      el.innerHTML = `
-        <div style="flex:1">
-          <div>${(p.text||"").replace(/</g,"&lt;")}</div>
-          <div class="meta">${p.kind} • priority ${p.priority}${
-            p.link ? ` • <a href="${p.link}" target="_blank">boxscore</a>` : ""
-          }</div>
-        </div>
-        <div><button>Copy</button></div>`;
-      el.querySelector("button").onclick = async () => {
-        await navigator.clipboard.writeText(p.text);
-        el.querySelector("button").textContent = "Copied";
-        setTimeout(()=>el.querySelector("button").textContent="Copy",900);
-      };
-      list.appendChild(el);
+
+    // Render poll posts
+    pollsList.innerHTML = "";
+    if (!pollPosts.length) {
+      pollsList.textContent = "No poll posts in queue.";
+    } else {
+      for (const p of pollPosts) {
+        pollsList.appendChild(createPostElement(p));
+      }
     }
   } catch (err) {
-    list.textContent = "Could not load queue: " + err.message;
+    finalList.textContent = "Could not load queue: " + err.message;
+    pollsList.textContent = "Could not load queue: " + err.message;
   }
 }
+
+function createPostElement(p) {
+  const el = document.createElement("div");
+  el.className = "post";
+  el.innerHTML = `
+    <div style="flex:1">
+      <div>${(p.text||"").replace(/</g,"&lt;")}</div>
+      <div class="meta">${p.kind} • priority ${p.priority}${
+        p.link ? ` • <a href="${p.link}" target="_blank">boxscore</a>` : ""
+      }</div>
+    </div>
+    <div><button>Copy</button></div>`;
+  el.querySelector("button").onclick = async () => {
+    await navigator.clipboard.writeText(p.text);
+    el.querySelector("button").textContent = "Copied";
+    setTimeout(()=>el.querySelector("button").textContent="Copy",900);
+  };
+  return el;
+}
+// Tab switching functionality
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Remove active class from all tabs and content
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    // Add active class to clicked tab and corresponding content
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab + '-tab').classList.add('active');
+  });
+});
+
 document.getElementById("refresh").onclick = load;
 load();
 </script>
