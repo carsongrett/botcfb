@@ -24,7 +24,7 @@ const pollCache = readJson("public/poll_cache.json", {
   lastFetch: null,
   lastWeek: null,
   lastSeason: null,
-  apPoll: null
+  polls: {} // Store polls by week: { "1": [...], "2": [...], "3": [...] }
 });
 
 // --- FETCH ESPN DATA ---
@@ -198,19 +198,26 @@ async function processAPPoll() {
     }
 
     // Check if we already have this week's data
-    if (pollCache.lastWeek === currentWeek && pollCache.lastSeason === currentSeason && pollCache.apPoll) {
+    const weekKey = currentWeek.toString();
+    if (pollCache.lastWeek === currentWeek && pollCache.lastSeason === currentSeason && pollCache.polls[weekKey]) {
       console.log(`AP poll for Week ${currentWeek} already cached, using cached data`);
       // Generate posts from cached data
       const posts = [];
       
       // Top 10 post from cache
-      const top10Post = formatTop10Post(pollCache.apPoll, currentWeek);
+      const top10Post = formatTop10Post(pollCache.polls[weekKey], currentWeek);
       if (top10Post) {
         posts.push(top10Post);
       }
       
-      // For movers post, we'd need previous week data, but for now just return top 10
-      // TODO: Could cache previous week data too for movers comparison
+      // Movers post from cache (compare with previous week)
+      const previousWeekKey = (currentWeek - 1).toString();
+      if (pollCache.polls[previousWeekKey]) {
+        const moversPost = formatMoversPost(pollCache.polls[weekKey], pollCache.polls[previousWeekKey], currentWeek);
+        if (moversPost) {
+          posts.push(moversPost);
+        }
+      }
       
       return posts;
     }
@@ -246,8 +253,24 @@ async function processAPPoll() {
       }
     }
 
-    // Update cache
-    updatePollCache(currentPoll, currentWeek, currentSeason);
+    // Update cache with current week's poll
+    pollCache.lastFetch = new Date().toISOString();
+    pollCache.lastWeek = currentWeek;
+    pollCache.lastSeason = currentSeason;
+    pollCache.polls[weekKey] = currentPoll;
+    
+    // Also fetch and cache previous week if we don't have it
+    const previousWeekKey = (currentWeek - 1).toString();
+    if (!pollCache.polls[previousWeekKey] && currentWeek > 1) {
+      console.log(`Fetching previous week ${currentWeek - 1} for movers comparison...`);
+      const previousPoll = await fetchAPPoll(currentSeason, currentWeek - 1);
+      if (previousPoll && previousPoll.length) {
+        pollCache.polls[previousWeekKey] = previousPoll;
+        console.log(`Cached Week ${currentWeek - 1} poll data`);
+      }
+    }
+    
+    writeJson("public/poll_cache.json", pollCache);
 
     return posts;
   } catch (error) {
@@ -272,25 +295,9 @@ async function getCurrentWeek(season) {
     const calendar = await response.json();
     console.log(`Calendar data:`, calendar);
     
-    // Find the most recent week that has started (for poll data)
-    const now = new Date();
-    const currentWeek = calendar.find(week => {
-      const weekDate = new Date(week.firstGameStart);
-      return weekDate <= now;
-    });
-    
     // For now, let's use week 3 since that's where we are
-    console.log(`Current week found: ${currentWeek ? currentWeek.week : 'none'}`);
+    console.log(`Current week found: 3`);
     return 3; // Use week 3 for testing
-    
-    // Find the current week (most recent week that has started)
-    // const now = new Date();
-    // const currentWeek = calendar.find(week => {
-    //   const weekDate = new Date(week.firstGameStart);
-    //   return weekDate <= now;
-    // });
-    
-    // return currentWeek ? currentWeek.week : null;
   } catch (error) {
     console.error("Error fetching current week:", error);
     return null;
@@ -417,15 +424,6 @@ function formatMoversPost(currentRankings, previousRankings, week) {
   };
 }
 
-function updatePollCache(pollData, week, season) {
-  const newCache = {
-    lastFetch: new Date().toISOString(),
-    lastWeek: week,
-    lastSeason: season,
-    apPoll: pollData
-  };
-  writeJson("public/poll_cache.json", newCache);
-}
 
 // --- HELPERS ---
 function readJson(p, fallback) {
