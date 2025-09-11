@@ -24,7 +24,8 @@ const pollCache = readJson("public/poll_cache.json", {
   lastFetch: null,
   lastWeek: null,
   lastSeason: null,
-  polls: {} // Store polls by week: { "1": [...], "2": [...], "3": [...] }
+  apPolls: {}, // Store AP polls by week: { "1": [...], "2": [...], "3": [...] }
+  coachesPolls: {} // Store Coaches polls by week: { "1": [...], "2": [...], "3": [...] }
 });
 
 // --- FETCH ESPN DATA ---
@@ -177,9 +178,12 @@ for (const e of finals) {
   });
 }
 
-// --- PROCESS AP POLL ---
-const pollPosts = await processAPPoll();
-drafts.push(...pollPosts);
+// --- PROCESS POLLS ---
+const apPollPosts = await processAPPoll();
+drafts.push(...apPollPosts);
+
+const coachesPollPosts = await processCoachesPoll();
+drafts.push(...coachesPollPosts);
 
 // --- WRITE OUTPUT ---
 writeJson("public/cfb_queue.json", { generatedAt: nowIso, posts: drafts });
@@ -199,21 +203,21 @@ async function processAPPoll() {
 
     // Check if we already have this week's data
     const weekKey = currentWeek.toString();
-    if (pollCache.lastWeek === currentWeek && pollCache.lastSeason === currentSeason && pollCache.polls[weekKey]) {
+    if (pollCache.lastWeek === currentWeek && pollCache.lastSeason === currentSeason && pollCache.apPolls[weekKey]) {
       console.log(`AP poll for Week ${currentWeek} already cached, using cached data`);
       // Generate posts from cached data
       const posts = [];
       
       // Top 10 post from cache
-      const top10Post = formatTop10Post(pollCache.polls[weekKey], currentWeek);
+      const top10Post = formatTop10Post(pollCache.apPolls[weekKey], currentWeek);
       if (top10Post) {
         posts.push(top10Post);
       }
       
     // Movers post from cache (compare with previous week)
     const previousWeekKey = (currentWeek - 1).toString();
-    if (pollCache.polls[previousWeekKey] && pollCache.polls[previousWeekKey].length > 0) {
-      const moversPost = formatMoversPost(pollCache.polls[weekKey], pollCache.polls[previousWeekKey], currentWeek);
+    if (pollCache.apPolls[previousWeekKey] && pollCache.apPolls[previousWeekKey].length > 0) {
+      const moversPost = formatMoversPost(pollCache.apPolls[weekKey], pollCache.apPolls[previousWeekKey], currentWeek);
       if (moversPost) {
         posts.push(moversPost);
       }
@@ -259,16 +263,16 @@ async function processAPPoll() {
     pollCache.lastFetch = new Date().toISOString();
     pollCache.lastWeek = currentWeek;
     pollCache.lastSeason = currentSeason;
-    pollCache.polls[weekKey] = currentPoll;
+    pollCache.apPolls[weekKey] = currentPoll;
     
     // Also fetch and cache previous week if we don't have it
     const previousWeekKey = (currentWeek - 1).toString();
-    if (!pollCache.polls[previousWeekKey] && currentWeek > 1) {
+    if (!pollCache.apPolls[previousWeekKey] && currentWeek > 1) {
       console.log(`Fetching previous week ${currentWeek - 1} for movers comparison...`);
       const previousPoll = await fetchAPPoll(currentSeason, currentWeek - 1);
       if (previousPoll && previousPoll.length) {
-        pollCache.polls[previousWeekKey] = previousPoll;
-        console.log(`Cached Week ${currentWeek - 1} poll data`);
+        pollCache.apPolls[previousWeekKey] = previousPoll;
+        console.log(`Cached Week ${currentWeek - 1} AP poll data`);
       }
     }
     
@@ -277,6 +281,101 @@ async function processAPPoll() {
     return posts;
   } catch (error) {
     console.error("Error processing AP poll:", error);
+    return [];
+  }
+}
+
+async function processCoachesPoll() {
+  try {
+    // Get current season and week
+    const currentSeason = new Date().getFullYear(); // 2025
+    const currentWeek = await getCurrentWeek(currentSeason);
+    
+    if (!currentWeek) {
+      console.log("No current week found, skipping Coaches poll");
+      return [];
+    }
+
+    // Check if we already have this week's data
+    const weekKey = currentWeek.toString();
+    if (pollCache.lastWeek === currentWeek && pollCache.lastSeason === currentSeason && pollCache.coachesPolls[weekKey]) {
+      console.log(`Coaches poll for Week ${currentWeek} already cached, using cached data`);
+      // Generate posts from cached data
+      const posts = [];
+      
+      // Top 10 post from cache
+      const top10Post = formatCoachesTop10Post(pollCache.coachesPolls[weekKey], currentWeek);
+      if (top10Post) {
+        posts.push(top10Post);
+      }
+      
+    // Movers post from cache (compare with previous week)
+    const previousWeekKey = (currentWeek - 1).toString();
+    if (pollCache.coachesPolls[previousWeekKey] && pollCache.coachesPolls[previousWeekKey].length > 0) {
+      const moversPost = formatCoachesMoversPost(pollCache.coachesPolls[weekKey], pollCache.coachesPolls[previousWeekKey], currentWeek);
+      if (moversPost) {
+        posts.push(moversPost);
+      }
+    } else {
+      console.log(`No previous week data available for movers comparison`);
+    }
+      
+      return posts;
+    }
+
+    // Fetch current Coaches poll
+    const currentPoll = await fetchCoachesPoll(currentSeason, currentWeek);
+    if (!currentPoll || !currentPoll.length) {
+      console.log("No Coaches poll data found for current week");
+      return [];
+    }
+
+    // Fetch previous week's poll for comparison
+    const previousWeek = currentWeek > 1 ? currentWeek - 1 : null;
+    let previousPoll = null;
+    if (previousWeek) {
+      previousPoll = await fetchCoachesPoll(currentSeason, previousWeek);
+    }
+
+    // Generate posts
+    const posts = [];
+    
+    // Top 10 post
+    const top10Post = formatCoachesTop10Post(currentPoll, currentWeek);
+    if (top10Post) {
+      posts.push(top10Post);
+    }
+
+    // Movers post (only if we have previous data)
+    if (previousPoll) {
+      const moversPost = formatCoachesMoversPost(currentPoll, previousPoll, currentWeek);
+      if (moversPost) {
+        posts.push(moversPost);
+      }
+    }
+
+    // Update cache with current week's poll
+    pollCache.lastFetch = new Date().toISOString();
+    pollCache.lastWeek = currentWeek;
+    pollCache.lastSeason = currentSeason;
+    pollCache.coachesPolls[weekKey] = currentPoll;
+    
+    // Also fetch and cache previous week if we don't have it
+    const previousWeekKey = (currentWeek - 1).toString();
+    if (!pollCache.coachesPolls[previousWeekKey] && currentWeek > 1) {
+      console.log(`Fetching previous week ${currentWeek - 1} for movers comparison...`);
+      const previousPoll = await fetchCoachesPoll(currentSeason, currentWeek - 1);
+      if (previousPoll && previousPoll.length) {
+        pollCache.coachesPolls[previousWeekKey] = previousPoll;
+        console.log(`Cached Week ${currentWeek - 1} Coaches poll data`);
+      }
+    }
+    
+    writeJson("public/poll_cache.json", pollCache);
+
+    return posts;
+  } catch (error) {
+    console.error("Error processing Coaches poll:", error);
     return [];
   }
 }
@@ -334,6 +433,34 @@ async function fetchAPPoll(season, week) {
   }
 }
 
+async function fetchCoachesPoll(season, week) {
+  try {
+    console.log(`Fetching Coaches poll for season ${season}, week ${week}...`);
+    const response = await fetch(`${CFBD_BASE}/rankings?year=${season}&week=${week}&seasonType=regular`, {
+      headers: { "Authorization": `Bearer ${CFBD_API_KEY}` }
+    });
+    
+    console.log(`Rankings response status: ${response.status}`);
+    if (!response.ok) {
+      console.error(`Rankings API error: ${response.status} ${response.statusText}`);
+      return null;
+    }
+    
+    const rankings = await response.json();
+    console.log(`Rankings data:`, JSON.stringify(rankings, null, 2));
+    
+    // Find Coaches poll in the polls array
+    const polls = rankings[0]?.polls || [];
+    console.log(`Available polls:`, polls.map(p => p.poll));
+    const coachesPoll = polls.find(poll => poll.poll === "Coaches Poll");
+    console.log(`Coaches Poll found:`, coachesPoll);
+    return coachesPoll ? coachesPoll.ranks : null;
+  } catch (error) {
+    console.error("Error fetching Coaches poll:", error);
+    return null;
+  }
+}
+
 function formatTop10Post(rankings, week) {
   if (!rankings || rankings.length < 10) return null;
 
@@ -345,9 +472,32 @@ function formatTop10Post(rankings, week) {
   });
   
   text += `\n#APTop25 #CFB`;
-  
+
   return {
     id: `ap_top10_week${week}`,
+    kind: "poll_top10",
+    priority: 85,
+    text: text.slice(0, 240),
+    link: "",
+    expiresAt: new Date(Date.now() + 7 * 24 * 3600e3).toISOString(), // 7 days
+    source: "cfbd"
+  };
+}
+
+function formatCoachesTop10Post(rankings, week) {
+  if (!rankings || rankings.length < 10) return null;
+
+  const top10 = rankings.slice(0, 10);
+  let text = `Coaches Poll Top 10 - Week ${week}\n`;
+  
+  top10.forEach((team, index) => {
+    text += `${index + 1}. ${team.school}\n`;
+  });
+  
+  text += `\n#CoachesPoll #CFB`;
+
+  return {
+    id: `coaches_top10_week${week}`,
     kind: "poll_top10",
     priority: 85,
     text: text.slice(0, 240),
@@ -417,6 +567,75 @@ function formatMoversPost(currentRankings, previousRankings, week) {
 
   return {
     id: `ap_movers_week${week}`,
+    kind: "poll_movers", 
+    priority: 80,
+    text: text.slice(0, 240),
+    link: "",
+    expiresAt: new Date(Date.now() + 7 * 24 * 3600e3).toISOString(), // 7 days
+    source: "cfbd"
+  };
+}
+
+function formatCoachesMoversPost(currentRankings, previousRankings, week) {
+  if (!currentRankings || !previousRankings) return null;
+
+  // Create lookup for previous rankings
+  const previousLookup = {};
+  previousRankings.forEach(team => {
+    previousLookup[team.school] = team.rank;
+  });
+
+  const movers = [];
+  const newEntries = [];
+
+  // Find movers and new entries
+  currentRankings.forEach(team => {
+    const previousRank = previousLookup[team.school];
+    const currentRank = team.rank;
+    
+    if (previousRank === undefined) {
+      // New entry
+      newEntries.push({ team: team.school, rank: currentRank });
+    } else {
+      const change = previousRank - currentRank; // Positive = moved up
+      if (Math.abs(change) >= 3) {
+        movers.push({
+          team: team.school,
+          currentRank,
+          previousRank,
+          change
+        });
+      }
+    }
+  });
+
+  // Sort movers by biggest change first
+  movers.sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
+
+  // Combine movers and new entries, cap at 9
+  const allChanges = [
+    ...movers.slice(0, 9 - newEntries.length),
+    ...newEntries.map(entry => ({ ...entry, change: 'NEW' }))
+  ];
+
+  if (allChanges.length === 0) return null;
+
+  let text = `Coaches Poll Movers - Week ${week}\n`;
+  
+  allChanges.forEach(change => {
+    if (change.change === 'NEW') {
+      text += `NEW: #${change.rank} ${change.team}\n`;
+    } else {
+      const arrow = change.change > 0 ? '⬆️' : '⬇️';
+      const moveText = change.change > 0 ? `+${change.change}` : `${change.change}`;
+      text += `${arrow}${moveText} ${change.team} (${change.previousRank}→${change.currentRank})\n`;
+    }
+  });
+  
+  text += `\n#CoachesPoll #CFB`;
+
+  return {
+    id: `coaches_movers_week${week}`,
     kind: "poll_movers", 
     priority: 80,
     text: text.slice(0, 240),
