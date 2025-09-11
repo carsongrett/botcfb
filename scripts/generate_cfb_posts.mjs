@@ -393,9 +393,9 @@ function formatMoversPost(currentRankings, previousRankings, week) {
   // Sort movers by biggest change first
   movers.sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
 
-  // Combine movers and new entries, cap at 10
+  // Combine movers and new entries, cap at 9
   const allChanges = [
-    ...movers.slice(0, 10 - newEntries.length),
+    ...movers.slice(0, 9 - newEntries.length),
     ...newEntries.map(entry => ({ ...entry, change: 'NEW' }))
   ];
 
@@ -408,8 +408,8 @@ function formatMoversPost(currentRankings, previousRankings, week) {
       text += `NEW: #${change.rank} ${change.team}\n`;
     } else {
       const arrow = change.change > 0 ? '⬆️' : '⬇️';
-      const moveSize = Math.abs(change.change);
-      text += `${arrow}+${moveSize} ${change.team} (#${change.previousRank} → #${change.currentRank})\n`;
+      const moveText = change.change > 0 ? `+${change.change}` : `${change.change}`;
+      text += `${arrow}${moveText} ${change.team} (${change.previousRank}→${change.currentRank})\n`;
     }
   });
   
