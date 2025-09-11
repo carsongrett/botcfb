@@ -4,6 +4,8 @@ import fs from "node:fs";
 // --- CONFIG ---
 const BASE = "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?groups=80";
 const LOOKBACK_DAYS = 5;
+const CFBD_API_KEY = "HE0za3imjd2EFPDvFB/xVjPnoZ7SvGQy80CKZDaP+Zijsos2nYsaMoHg8pLuIS+u";
+const CFBD_BASE = "https://api.collegefootballdata.com";
 
 // --- DATE RANGE (last 5 days) ---
 const end = fmtYMD(new Date());
@@ -16,6 +18,14 @@ const posted = readJson("posted_ids.json", { ids: [] });
 
 // --- LOAD TEAM HASHTAGS ---
 const teamHashtags = readJson("public/team_hashtags.json", []);
+
+// --- LOAD POLL CACHE ---
+const pollCache = readJson("public/poll_cache.json", {
+  lastFetch: null,
+  lastWeek: null,
+  lastSeason: null,
+  apPoll: null
+});
 
 // --- FETCH ESPN DATA ---
 const sb = await (await fetch(SCOREBOARD)).json();
@@ -167,9 +177,243 @@ for (const e of finals) {
   });
 }
 
+// --- PROCESS AP POLL ---
+const pollPosts = await processAPPoll();
+drafts.push(...pollPosts);
+
 // --- WRITE OUTPUT ---
 writeJson("public/cfb_queue.json", { generatedAt: nowIso, posts: drafts });
 writeJson("posted_ids.json", { ids: [...posted.ids, ...drafts.map(d => d.id)] });
+
+// --- POLL PROCESSING FUNCTIONS ---
+async function processAPPoll() {
+  try {
+    // Get current season and week
+    const currentSeason = new Date().getFullYear(); // 2025
+    const currentWeek = await getCurrentWeek(currentSeason);
+    
+    if (!currentWeek) {
+      console.log("No current week found, skipping AP poll");
+      return [];
+    }
+
+    // Check if we already have this week's data
+    if (pollCache.lastWeek === currentWeek && pollCache.lastSeason === currentSeason && pollCache.apPoll) {
+      console.log(`AP poll for Week ${currentWeek} already cached, skipping`);
+      return [];
+    }
+
+    // Fetch current AP poll
+    const currentPoll = await fetchAPPoll(currentSeason, currentWeek);
+    if (!currentPoll || !currentPoll.length) {
+      console.log("No AP poll data found for current week");
+      return [];
+    }
+
+    // Fetch previous week's poll for comparison
+    const previousWeek = currentWeek > 1 ? currentWeek - 1 : null;
+    let previousPoll = null;
+    if (previousWeek) {
+      previousPoll = await fetchAPPoll(currentSeason, previousWeek);
+    }
+
+    // Generate posts
+    const posts = [];
+    
+    // Top 10 post
+    const top10Post = formatTop10Post(currentPoll, currentWeek);
+    if (top10Post) {
+      posts.push(top10Post);
+    }
+
+    // Movers post (only if we have previous data)
+    if (previousPoll) {
+      const moversPost = formatMoversPost(currentPoll, previousPoll, currentWeek);
+      if (moversPost) {
+        posts.push(moversPost);
+      }
+    }
+
+    // Update cache
+    updatePollCache(currentPoll, currentWeek, currentSeason);
+
+    return posts;
+  } catch (error) {
+    console.error("Error processing AP poll:", error);
+    return [];
+  }
+}
+
+async function getCurrentWeek(season) {
+  try {
+    console.log(`Fetching calendar for season ${season}...`);
+    const response = await fetch(`${CFBD_BASE}/calendar?year=${season}`, {
+      headers: { "Authorization": `Bearer ${CFBD_API_KEY}` }
+    });
+    
+    console.log(`Calendar response status: ${response.status}`);
+    if (!response.ok) {
+      console.error(`Calendar API error: ${response.status} ${response.statusText}`);
+      return null;
+    }
+    
+    const calendar = await response.json();
+    console.log(`Calendar data:`, calendar);
+    
+    // Find the most recent week that has started (for poll data)
+    const now = new Date();
+    const currentWeek = calendar.find(week => {
+      const weekDate = new Date(week.firstGameStart);
+      return weekDate <= now;
+    });
+    
+    // For now, let's use week 3 since that's where we are
+    console.log(`Current week found: ${currentWeek ? currentWeek.week : 'none'}`);
+    return 3; // Use week 3 for testing
+    
+    // Find the current week (most recent week that has started)
+    // const now = new Date();
+    // const currentWeek = calendar.find(week => {
+    //   const weekDate = new Date(week.firstGameStart);
+    //   return weekDate <= now;
+    // });
+    
+    // return currentWeek ? currentWeek.week : null;
+  } catch (error) {
+    console.error("Error fetching current week:", error);
+    return null;
+  }
+}
+
+async function fetchAPPoll(season, week) {
+  try {
+    console.log(`Fetching AP poll for season ${season}, week ${week}...`);
+    const response = await fetch(`${CFBD_BASE}/rankings?year=${season}&week=${week}&seasonType=regular`, {
+      headers: { "Authorization": `Bearer ${CFBD_API_KEY}` }
+    });
+    
+    console.log(`Rankings response status: ${response.status}`);
+    if (!response.ok) {
+      console.error(`Rankings API error: ${response.status} ${response.statusText}`);
+      return null;
+    }
+    
+    const rankings = await response.json();
+    console.log(`Rankings data:`, JSON.stringify(rankings, null, 2));
+    
+    // Find AP poll in the polls array
+    const polls = rankings[0]?.polls || [];
+    console.log(`Available polls:`, polls.map(p => p.poll));
+    const apPoll = polls.find(poll => poll.poll === "AP Top 25");
+    console.log(`AP Poll found:`, apPoll);
+    return apPoll ? apPoll.ranks : null;
+  } catch (error) {
+    console.error("Error fetching AP poll:", error);
+    return null;
+  }
+}
+
+function formatTop10Post(rankings, week) {
+  if (!rankings || rankings.length < 10) return null;
+
+  const top10 = rankings.slice(0, 10);
+  let text = `AP Top 10 - Week ${week}\n`;
+  
+  top10.forEach((team, index) => {
+    text += `${index + 1}. ${team.school}\n`;
+  });
+  
+  text += `\n#APTop25 #CFB`;
+  
+  return {
+    id: `ap_top10_week${week}`,
+    kind: "poll_top10",
+    priority: 85,
+    text: text.slice(0, 240),
+    link: "",
+    expiresAt: new Date(Date.now() + 7 * 24 * 3600e3).toISOString(), // 7 days
+    source: "cfbd"
+  };
+}
+
+function formatMoversPost(currentRankings, previousRankings, week) {
+  if (!currentRankings || !previousRankings) return null;
+
+  // Create lookup for previous rankings
+  const previousLookup = {};
+  previousRankings.forEach(team => {
+    previousLookup[team.school] = team.rank;
+  });
+
+  const movers = [];
+  const newEntries = [];
+
+  // Find movers and new entries
+  currentRankings.forEach(team => {
+    const previousRank = previousLookup[team.school];
+    const currentRank = team.rank;
+    
+    if (previousRank === undefined) {
+      // New entry
+      newEntries.push({ team: team.school, rank: currentRank });
+    } else {
+      const change = previousRank - currentRank; // Positive = moved up
+      if (Math.abs(change) >= 3) {
+        movers.push({
+          team: team.school,
+          currentRank,
+          previousRank,
+          change
+        });
+      }
+    }
+  });
+
+  // Sort movers by biggest change first
+  movers.sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
+
+  // Combine movers and new entries, cap at 10
+  const allChanges = [
+    ...movers.slice(0, 10 - newEntries.length),
+    ...newEntries.map(entry => ({ ...entry, change: 'NEW' }))
+  ];
+
+  if (allChanges.length === 0) return null;
+
+  let text = `AP Poll Movers - Week ${week}\n`;
+  
+  allChanges.forEach(change => {
+    if (change.change === 'NEW') {
+      text += `NEW: #${change.rank} ${change.team}\n`;
+    } else {
+      const arrow = change.change > 0 ? '⬆️' : '⬇️';
+      const moveSize = Math.abs(change.change);
+      text += `${arrow}+${moveSize} ${change.team} (#${change.previousRank} → #${change.currentRank})\n`;
+    }
+  });
+  
+  text += `\n#APTop25 #CFB`;
+
+  return {
+    id: `ap_movers_week${week}`,
+    kind: "poll_movers", 
+    priority: 80,
+    text: text.slice(0, 240),
+    link: "",
+    expiresAt: new Date(Date.now() + 7 * 24 * 3600e3).toISOString(), // 7 days
+    source: "cfbd"
+  };
+}
+
+function updatePollCache(pollData, week, season) {
+  const newCache = {
+    lastFetch: new Date().toISOString(),
+    lastWeek: week,
+    lastSeason: season,
+    apPoll: pollData
+  };
+  writeJson("public/poll_cache.json", newCache);
+}
 
 // --- HELPERS ---
 function readJson(p, fallback) {
