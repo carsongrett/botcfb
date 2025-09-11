@@ -25,7 +25,8 @@ const pollCache = readJson("public/poll_cache.json", {
   lastWeek: null,
   lastSeason: null,
   apPolls: {}, // Store AP polls by week: { "1": [...], "2": [...], "3": [...] }
-  coachesPolls: {} // Store Coaches polls by week: { "1": [...], "2": [...], "3": [...] }
+  coachesPolls: {}, // Store Coaches polls by week: { "1": [...], "2": [...], "3": [...] }
+  spRatings: {} // Store SP+ ratings by week: { "1": [...], "2": [...], "3": [...] }
 });
 
 // --- FETCH ESPN DATA ---
@@ -184,6 +185,9 @@ drafts.push(...apPollPosts);
 
 const coachesPollPosts = await processCoachesPoll();
 drafts.push(...coachesPollPosts);
+
+const spRatingsPosts = await processSPRatings();
+drafts.push(...spRatingsPosts);
 
 // --- WRITE OUTPUT ---
 writeJson("public/cfb_queue.json", { generatedAt: nowIso, posts: drafts });
@@ -380,6 +384,102 @@ async function processCoachesPoll() {
   }
 }
 
+async function processSPRatings() {
+  try {
+    // Get current season and week
+    const currentSeason = new Date().getFullYear(); // 2025
+    const currentWeek = await getCurrentWeek(currentSeason);
+    
+    if (!currentWeek) {
+      console.log("No current week found, skipping SP+ ratings");
+      return [];
+    }
+
+    // Check if we already have this week's data
+    const weekKey = currentWeek.toString();
+    if (pollCache.lastWeek === currentWeek && pollCache.lastSeason === currentSeason && pollCache.spRatings && pollCache.spRatings[weekKey]) {
+      console.log(`SP+ ratings for Week ${currentWeek} already cached, using cached data`);
+      // Generate posts from cached data
+      const posts = [];
+      
+      // Top 10 post from cache
+      const top10Post = formatSPTop10Post(pollCache.spRatings[weekKey], currentWeek);
+      if (top10Post) {
+        posts.push(top10Post);
+      }
+      
+    // Movers post from cache (compare with previous week)
+    const previousWeekKey = (currentWeek - 1).toString();
+    if (pollCache.spRatings && pollCache.spRatings[previousWeekKey] && pollCache.spRatings[previousWeekKey].length > 0) {
+      const moversPost = formatSPMoversPost(pollCache.spRatings[weekKey], pollCache.spRatings[previousWeekKey], currentWeek);
+      if (moversPost) {
+        posts.push(moversPost);
+      }
+    } else {
+      console.log(`No previous week data available for movers comparison`);
+    }
+      
+      return posts;
+    }
+
+    // Fetch current SP+ ratings
+    const currentRatings = await fetchSPRatings(currentSeason, currentWeek);
+    if (!currentRatings || !currentRatings.length) {
+      console.log("No SP+ ratings data found for current week");
+      return [];
+    }
+
+    // Fetch previous week's ratings for comparison
+    const previousWeek = currentWeek > 1 ? currentWeek - 1 : null;
+    let previousRatings = null;
+    if (previousWeek) {
+      previousRatings = await fetchSPRatings(currentSeason, previousWeek);
+    }
+
+    // Generate posts
+    const posts = [];
+    
+    // Top 10 post
+    const top10Post = formatSPTop10Post(currentRatings, currentWeek);
+    if (top10Post) {
+      posts.push(top10Post);
+    }
+
+    // Movers post (only if we have previous data)
+    if (previousRatings) {
+      const moversPost = formatSPMoversPost(currentRatings, previousRatings, currentWeek);
+      if (moversPost) {
+        posts.push(moversPost);
+      }
+    }
+
+    // Update cache with current week's ratings
+    pollCache.lastFetch = new Date().toISOString();
+    pollCache.lastWeek = currentWeek;
+    pollCache.lastSeason = currentSeason;
+    if (!pollCache.spRatings) pollCache.spRatings = {};
+    pollCache.spRatings[weekKey] = currentRatings;
+    
+    // Also fetch and cache previous week if we don't have it
+    const previousWeekKey = (currentWeek - 1).toString();
+    if (!pollCache.spRatings[previousWeekKey] && currentWeek > 1) {
+      console.log(`Fetching previous week ${currentWeek - 1} for movers comparison...`);
+      const previousRatings = await fetchSPRatings(currentSeason, currentWeek - 1);
+      if (previousRatings && previousRatings.length) {
+        pollCache.spRatings[previousWeekKey] = previousRatings;
+        console.log(`Cached Week ${currentWeek - 1} SP+ ratings data`);
+      }
+    }
+    
+    writeJson("public/poll_cache.json", pollCache);
+
+    return posts;
+  } catch (error) {
+    console.error("Error processing SP+ ratings:", error);
+    return [];
+  }
+}
+
 async function getCurrentWeek(season) {
   try {
     console.log(`Fetching calendar for season ${season}...`);
@@ -457,6 +557,36 @@ async function fetchCoachesPoll(season, week) {
     return coachesPoll ? coachesPoll.ranks : null;
   } catch (error) {
     console.error("Error fetching Coaches poll:", error);
+    return null;
+  }
+}
+
+async function fetchSPRatings(season, week) {
+  try {
+    console.log(`Fetching SP+ ratings for season ${season}, week ${week}...`);
+    const response = await fetch(`${CFBD_BASE}/ratings/sp?year=${season}&week=${week}`, {
+      headers: { "Authorization": `Bearer ${CFBD_API_KEY}` }
+    });
+    
+    console.log(`SP+ response status: ${response.status}`);
+    if (!response.ok) {
+      console.error(`SP+ API error: ${response.status} ${response.statusText}`);
+      return null;
+    }
+    
+    const ratings = await response.json();
+    console.log(`SP+ data length: ${ratings.length}`);
+    
+    // Filter out entries with null rankings (like nationalAverages)
+    const validRatings = ratings.filter(team => team.ranking !== null && team.ranking !== undefined);
+    
+    // Sort by ranking to ensure proper order
+    const sortedRatings = validRatings.sort((a, b) => a.ranking - b.ranking);
+    console.log(`SP+ top 5:`, sortedRatings.slice(0, 5).map(t => `${t.ranking}. ${t.team} (${t.rating})`));
+    
+    return sortedRatings;
+  } catch (error) {
+    console.error("Error fetching SP+ ratings:", error);
     return null;
   }
 }
@@ -636,6 +766,100 @@ function formatCoachesMoversPost(currentRankings, previousRankings, week) {
 
   return {
     id: `coaches_movers_week${week}`,
+    kind: "poll_movers", 
+    priority: 80,
+    text: text.slice(0, 240),
+    link: "",
+    expiresAt: new Date(Date.now() + 7 * 24 * 3600e3).toISOString(), // 7 days
+    source: "cfbd"
+  };
+}
+
+function formatSPTop10Post(ratings, week) {
+  if (!ratings || ratings.length < 10) return null;
+
+  const top10 = ratings.slice(0, 10);
+  let text = `SP+ Power Rankings - Week ${week}\n`;
+  
+  top10.forEach((team, index) => {
+    text += `${index + 1}. ${team.team} (${team.rating})\n`;
+  });
+  
+  text += `\n#SPPlus #CFB`;
+
+  return {
+    id: `sp_top10_week${week}`,
+    kind: "poll_top10",
+    priority: 85,
+    text: text.slice(0, 240),
+    link: "",
+    expiresAt: new Date(Date.now() + 7 * 24 * 3600e3).toISOString(), // 7 days
+    source: "cfbd"
+  };
+}
+
+function formatSPMoversPost(currentRatings, previousRatings, week) {
+  if (!currentRatings || !previousRatings) return null;
+
+  // Create lookup for previous rankings
+  const previousLookup = {};
+  previousRatings.forEach(team => {
+    previousLookup[team.team] = team.ranking;
+  });
+
+  const movers = [];
+  const newEntries = [];
+
+  // Find movers and new entries
+  currentRatings.forEach(team => {
+    const previousRank = previousLookup[team.team];
+    const currentRank = team.ranking;
+    
+    if (previousRank === undefined) {
+      // New entry (top 25)
+      if (currentRank <= 25) {
+        newEntries.push({ team: team.team, rank: currentRank });
+      }
+    } else {
+      const change = previousRank - currentRank; // Positive = moved up
+      if (Math.abs(change) >= 3) {
+        movers.push({
+          team: team.team,
+          currentRank,
+          previousRank,
+          change
+        });
+      }
+    }
+  });
+
+  // Sort movers by biggest change first
+  movers.sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
+
+  // Combine movers and new entries, cap at 9
+  const allChanges = [
+    ...movers.slice(0, 9 - newEntries.length),
+    ...newEntries.map(entry => ({ ...entry, change: 'NEW' }))
+  ];
+
+  if (allChanges.length === 0) return null;
+
+  let text = `SP+ Power Rankings Movers - Week ${week}\n`;
+  
+  allChanges.forEach(change => {
+    if (change.change === 'NEW') {
+      text += `NEW: #${change.rank} ${change.team}\n`;
+    } else {
+      const arrow = change.change > 0 ? '⬆️' : '⬇️';
+      const moveText = change.change > 0 ? `+${change.change}` : `${change.change}`;
+      text += `${arrow}${moveText} ${change.team} (${change.previousRank}→${change.currentRank})\n`;
+    }
+  });
+  
+  text += `\n#SPPlus #CFB`;
+
+  return {
+    id: `sp_movers_week${week}`,
     kind: "poll_movers", 
     priority: 80,
     text: text.slice(0, 240),
