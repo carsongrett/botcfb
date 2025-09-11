@@ -199,8 +199,20 @@ async function processAPPoll() {
 
     // Check if we already have this week's data
     if (pollCache.lastWeek === currentWeek && pollCache.lastSeason === currentSeason && pollCache.apPoll) {
-      console.log(`AP poll for Week ${currentWeek} already cached, skipping`);
-      return [];
+      console.log(`AP poll for Week ${currentWeek} already cached, using cached data`);
+      // Generate posts from cached data
+      const posts = [];
+      
+      // Top 10 post from cache
+      const top10Post = formatTop10Post(pollCache.apPoll, currentWeek);
+      if (top10Post) {
+        posts.push(top10Post);
+      }
+      
+      // For movers post, we'd need previous week data, but for now just return top 10
+      // TODO: Could cache previous week data too for movers comparison
+      
+      return posts;
     }
 
     // Fetch current AP poll
