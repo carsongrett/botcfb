@@ -14,6 +14,9 @@ const SCOREBOARD = `${BASE}&dates=${start}-${end}`;
 const nowIso = new Date().toISOString();
 const posted = readJson("posted_ids.json", { ids: [] });
 
+// --- LOAD TEAM HASHTAGS ---
+const teamHashtags = readJson("public/team_hashtags.json", []);
+
 // --- FETCH ESPN DATA ---
 const sb = await (await fetch(SCOREBOARD)).json();
 const events = Array.isArray(sb?.events) ? sb.events : [];
@@ -138,6 +141,13 @@ for (const e of finals) {
   if (awayTop || homeTop) {
     const performers = [awayTop, homeTop].filter(Boolean);
     base += `\n${performers.join('\n')}`;
+  }
+
+  // Add winning team hashtag if available
+  const winnerTeamName = awayWon ? awayName : homeName;
+  const winnerHashtag = teamHashtags.find(t => t.team === winnerTeamName)?.hashtag;
+  if (winnerHashtag) {
+    base += `\n\n${winnerHashtag}`;
   }
 
   // --- DEDUPE ---
