@@ -145,7 +145,9 @@ for (const e of finals) {
 
   // Add winning team hashtag if available
   const winnerTeamName = awayWon ? awayName : homeName;
-  const winnerHashtag = teamHashtags.find(t => t.team === winnerTeamName)?.hashtag;
+  // Strip ranking prefix (e.g., "#21 Alabama Crimson Tide" -> "Alabama Crimson Tide")
+  const cleanTeamName = winnerTeamName.replace(/^#\d+\s+/, '');
+  const winnerHashtag = teamHashtags.find(t => t.team === cleanTeamName)?.hashtag;
   if (winnerHashtag) {
     base += `\n\n${winnerHashtag}`;
   }
