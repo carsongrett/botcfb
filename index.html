@@ -87,6 +87,11 @@ async function load() {
     const finalPosts = data.posts?.filter(p => p.kind === "final") || [];
     const pollPosts = data.posts?.filter(p => p.kind === "poll_top10" || p.kind === "poll_movers") || [];
     const bettingPosts = data.posts?.filter(p => p.kind === "betting_preview") || [];
+    
+    console.log("Debug - Total posts:", data.posts?.length || 0);
+    console.log("Debug - Final posts:", finalPosts.length);
+    console.log("Debug - Poll posts:", pollPosts.length);
+    console.log("Debug - Betting posts:", bettingPosts.length);
 
     // Sort posts: unposted first, then posted (by priority desc, then by original order)
     const postedItems = getPostedItems();
