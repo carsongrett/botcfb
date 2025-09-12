@@ -30,12 +30,16 @@
 <div class="tabs">
   <button class="tab active" data-tab="final">Final Scores</button>
   <button class="tab" data-tab="polls">Polls</button>
+  <button class="tab" data-tab="betting">Betting</button>
 </div>
 <div id="final-tab" class="tab-content active">
   <div id="final-list">Loading…</div>
 </div>
 <div id="polls-tab" class="tab-content">
   <div id="polls-list">Loading…</div>
+</div>
+<div id="betting-tab" class="tab-content">
+  <div id="betting-list">Loading…</div>
 </div>
 
 <script>
@@ -82,6 +86,7 @@ async function load() {
     // Separate posts by type
     const finalPosts = data.posts?.filter(p => p.kind === "final") || [];
     const pollPosts = data.posts?.filter(p => p.kind === "poll_top10" || p.kind === "poll_movers") || [];
+    const bettingPosts = data.posts?.filter(p => p.kind === "betting_preview") || [];
 
     // Sort posts: unposted first, then posted (by priority desc, then by original order)
     const postedItems = getPostedItems();
@@ -114,6 +119,17 @@ async function load() {
     } else {
       for (const p of sortPosts(pollPosts)) {
         pollsList.appendChild(createPostElement(p));
+      }
+    }
+
+    // Render betting posts
+    const bettingList = document.getElementById("betting-list");
+    bettingList.innerHTML = "";
+    if (!bettingPosts.length) {
+      bettingList.textContent = "No betting posts in queue.";
+    } else {
+      for (const p of sortPosts(bettingPosts)) {
+        bettingList.appendChild(createPostElement(p));
       }
     }
   } catch (err) {
