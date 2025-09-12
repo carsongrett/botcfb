@@ -36,8 +36,8 @@ This project automatically generates CFB social media content by:
 
 Currently supports:
 - **Final Scores** (`kind: "final"`) - Completed game results with analysis
-- **Poll Top 10** (`kind: "poll_top10"`) - Weekly AP Top 10 rankings
-- **Poll Movers** (`kind: "poll_movers"`) - Teams that moved 3+ spots in polls
+- **Poll Top 10** (`kind: "poll_top10"`) - Weekly AP Top 10, Coaches Poll Top 10, and SP+ Power Rankings
+- **Poll Movers** (`kind: "poll_movers"`) - Teams that moved 3+ spots in polls/rankings
 
 Planned expansion:
 - **Game Previews** (`kind: "preview"`) - Upcoming game analysis
@@ -52,12 +52,29 @@ Planned expansion:
 ├── posted_ids.json           # Tracks posted content to prevent duplicates
 ├── public/
 │   ├── cfb_queue.json        # Generated posts queue (all types)
-│   └── poll_cache.json       # Cached poll data for week-over-week comparisons
+│   ├── poll_cache.json       # Cached poll data for week-over-week comparisons
+│   └── team_hashtags.json    # Team hashtag mappings for social media posts
 ├── scripts/
 │   └── generate_cfb_posts.mjs # Content generation script (final scores + polls)
 └── .github/workflows/
     └── generate-cfb.yml      # Workflow to run content generation
 ```
+
+## Installation & Setup
+
+### Prerequisites
+- Node.js 20 or higher
+- Git (for GitHub Actions)
+
+### Environment Variables
+Set the following environment variable:
+- `CFBD_API_KEY`: Your CollegeFootballData API key (get one at [collegefootballdata.com](https://collegefootballdata.com))
+
+### Local Setup
+1. Clone the repository
+2. Install dependencies (if any are added in the future)
+3. Set your `CFBD_API_KEY` environment variable
+4. Run the generation script
 
 ## Usage
 
@@ -68,21 +85,28 @@ node scripts/generate_cfb_posts.mjs
 ```
 
 ### Automated Generation
-The GitHub Action workflow runs automatically and can be triggered manually from the Actions tab.
+The GitHub Action workflow can be triggered manually from the Actions tab. It includes an optional input to reset `posted_ids.json` for re-testing the same games.
 
 ### Web Interface
 Open `index.html` in a browser to view, filter, and copy generated posts. The interface includes separate tabs for "Final Scores" and "Polls" content.
 
 ## Polls Feature
 
-The bot generates two types of poll-related posts each week:
+The bot generates two types of poll-related posts each week for multiple ranking systems:
 
-### AP Top 10 Post
-- Clean ranking of the Top 10 teams for the current week
-- Includes poll name, week label, and hashtags (#APTop25 #CFB)
-- Generated from real AP Top 25 data via CollegeFootballData API
+### AP Poll Posts
+- **AP Top 10**: Clean ranking of the Top 10 teams with hashtags (#APTop25 #CFB)
+- **AP Movers**: Teams that moved 3+ spots, shows arrows and rank changes
 
-### AP Movers Post  
+### Coaches Poll Posts  
+- **Coaches Top 10**: Top 10 teams from Coaches Poll with hashtags (#CoachesPoll #CFB)
+- **Coaches Movers**: Teams that moved 3+ spots in Coaches Poll
+
+### SP+ Power Rankings Posts
+- **SP+ Top 10**: Top 10 teams with SP+ ratings (e.g., "1. Oregon (26.7)") and hashtags (#SPPlus #CFB)
+- **SP+ Movers**: Teams that moved 3+ spots in SP+ rankings
+
+### Movers Post Format
 - Highlights teams that moved up or down by 3+ spots compared to previous week
 - Shows arrows (⬆️⬇️) with movement size and rank changes
 - Includes new teams entering the Top 25
@@ -91,14 +115,16 @@ The bot generates two types of poll-related posts each week:
 
 ### Caching Strategy
 - Poll data is cached in `public/poll_cache.json` to minimize API calls
-- Stores multiple weeks of data to enable week-over-week comparisons
+- Stores multiple weeks of data for each ranking system (AP, Coaches, SP+)
+- Structure: `{ apPolls: {}, coachesPolls: {}, spRatings: {} }`
 - Automatically detects when new poll data is available
 - Falls back to cached data if API calls fail
 
 ### API Configuration
-- Uses CollegeFootballData (CFBD) API for poll data
+- Uses CollegeFootballData (CFBD) API for all poll/ranking data
 - Requires API key set as `CFBD_API_KEY` environment variable
 - Fetches current week and previous week data for comparison
+- Handles different data structures for polls vs. ratings (SP+)
 
 ## Adding New Post Types
 
@@ -118,8 +144,23 @@ To add a new type of posts (e.g., game previews):
 
 ## Configuration
 
+### Environment Variables
+- `CFBD_API_KEY`: CollegeFootballData API key for poll/ranking data (required)
+
+### Script Configuration
 - `LOOKBACK_DAYS`: How many days back to fetch games (default: 5)
 - `BASE`: ESPN API endpoint for scoreboard data
-- `CFBD_API_KEY`: CollegeFootballData API key for poll data
 - `CFBD_BASE`: CollegeFootballData API endpoint
 - Priority scoring: Upsets (90), Blowouts (70), Regular games (60), Polls (80-85)
+
+## Available Polls/Rankings
+
+The bot currently supports:
+- **AP Top 25** - Traditional media poll
+- **Coaches Poll** - Coaches' rankings
+- **SP+ Ratings** - Bill Connelly's advanced metric (power rankings)
+
+Future additions could include:
+- **FPI Rankings** - ESPN's Football Power Index
+- **CFP Rankings** - College Football Playoff committee rankings
+- **Other advanced metrics** - Various analytical ranking systems

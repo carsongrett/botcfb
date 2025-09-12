@@ -11,11 +11,15 @@
   .tab.active{border-bottom-color:#3b82f6;color:#1f2937;font-weight:500}
   .tab:hover{color:#374151}
   .post{border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;margin:10px 0;display:flex;gap:10px;align-items:flex-start}
+  .post.posted{opacity:0.6;background:#f8f9fa;border-color:#d1d5db}
   .meta{font-size:12px;color:#6b7280}
-  button{padding:6px 10px;border-radius:8px;border:1px solid #d1d5db;background:#fff;cursor:pointer}
+  button{padding:6px 10px;border-radius:8px;border:1px solid #d1d5db;background:#fff;cursor:pointer;margin-left:4px}
   button:hover{background:#f9fafb}
+  button.posted{background:#e5e7eb;color:#6b7280;cursor:default}
+  button.posted:hover{background:#e5e7eb}
   .tab-content{display:none}
   .tab-content.active{display:block}
+  .button-group{display:flex;gap:4px}
 </style>
 <header>
   <h1 style="margin:0">CFB Content Queue</h1>
@@ -36,6 +40,30 @@
 <script>
 const URL = "https://carsongrett.github.io/botcfb/public/cfb_queue.json";
 
+// Get posted items from localStorage
+function getPostedItems() {
+  try {
+    return JSON.parse(localStorage.getItem('postedItems') || '[]');
+  } catch {
+    return [];
+  }
+}
+
+// Save posted items to localStorage
+function savePostedItems(items) {
+  localStorage.setItem('postedItems', JSON.stringify(items));
+}
+
+// Mark an item as posted
+function markAsPosted(postId) {
+  const postedItems = getPostedItems();
+  if (!postedItems.includes(postId)) {
+    postedItems.push(postId);
+    savePostedItems(postedItems);
+    load(); // Reload to re-sort
+  }
+}
+
 async function load() {
   const finalList = document.getElementById("final-list");
   const pollsList = document.getElementById("polls-list");
@@ -54,12 +82,26 @@ async function load() {
     const finalPosts = data.posts?.filter(p => p.kind === "final") || [];
     const pollPosts = data.posts?.filter(p => p.kind === "poll_top10" || p.kind === "poll_movers") || [];
 
+    // Sort posts: unposted first, then posted (by priority desc, then by original order)
+    const postedItems = getPostedItems();
+    const sortPosts = (posts) => {
+      return posts.sort((a, b) => {
+        const aPosted = postedItems.includes(a.id);
+        const bPosted = postedItems.includes(b.id);
+        
+        if (aPosted && !bPosted) return 1;  // a goes after b
+        if (!aPosted && bPosted) return -1; // a goes before b
+        if (aPosted && bPosted) return 0;   // maintain order for posted items
+        return b.priority - a.priority;     // sort by priority for unposted
+      });
+    };
+
     // Render final scores
     finalList.innerHTML = "";
     if (!finalPosts.length) {
       finalList.textContent = "No final score posts in queue.";
     } else {
-      for (const p of finalPosts) {
+      for (const p of sortPosts(finalPosts)) {
         finalList.appendChild(createPostElement(p));
       }
     }
@@ -69,7 +111,7 @@ async function load() {
     if (!pollPosts.length) {
       pollsList.textContent = "No poll posts in queue.";
     } else {
-      for (const p of pollPosts) {
+      for (const p of sortPosts(pollPosts)) {
         pollsList.appendChild(createPostElement(p));
       }
     }
@@ -81,20 +123,38 @@ async function load() {
 
 function createPostElement(p) {
   const el = document.createElement("div");
-  el.className = "post";
+  const postedItems = getPostedItems();
+  const isPosted = postedItems.includes(p.id);
+  
+  el.className = `post${isPosted ? ' posted' : ''}`;
   el.innerHTML = `
     <div style="flex:1">
       <div>${(p.text||"").replace(/</g,"&lt;")}</div>
       <div class="meta">${p.kind} • priority ${p.priority}${
         p.link ? ` • <a href="${p.link}" target="_blank">boxscore</a>` : ""
-      }</div>
+      }${isPosted ? ' • <strong>POSTED</strong>' : ''}</div>
     </div>
-    <div><button>Copy</button></div>`;
+    <div class="button-group">
+      <button>Copy</button>
+      <button class="${isPosted ? 'posted' : ''}" ${isPosted ? 'disabled' : ''}>
+        ${isPosted ? 'Posted' : 'Mark as Posted'}
+      </button>
+    </div>`;
+  
+  // Copy button functionality
   el.querySelector("button").onclick = async () => {
     await navigator.clipboard.writeText(p.text);
     el.querySelector("button").textContent = "Copied";
     setTimeout(()=>el.querySelector("button").textContent="Copy",900);
   };
+  
+  // Mark as posted button functionality
+  if (!isPosted) {
+    el.querySelectorAll("button")[1].onclick = () => {
+      markAsPosted(p.id);
+    };
+  }
+  
   return el;
 }
 // Tab switching functionality
