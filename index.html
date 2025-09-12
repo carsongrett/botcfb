@@ -25,6 +25,7 @@
   <h1 style="margin:0">CFB Content Queue</h1>
   <small id="ts" class="meta"></small>
   <button id="refresh">Refresh</button>
+  <button id="clearPosted">Clear Posted</button>
 </header>
 <div class="tabs">
   <button class="tab active" data-tab="final">Final Scores</button>
@@ -38,7 +39,7 @@
 </div>
 
 <script>
-const URL = "https://carsongrett.github.io/botcfb/public/cfb_queue.json";
+const URL = "public/cfb_queue.json";
 
 // Get posted items from localStorage
 function getPostedItems() {
@@ -171,6 +172,11 @@ document.querySelectorAll('.tab').forEach(tab => {
 });
 
 document.getElementById("refresh").onclick = load;
+document.getElementById("clearPosted").onclick = () => {
+  localStorage.removeItem('postedItems');
+  console.log('Cleared posted items from localStorage');
+  load();
+};
 load();
 </script>
 </html>
