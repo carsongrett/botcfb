@@ -1,138 +1,58 @@
 {
+  "generatedAt": "2025-09-12T03:40:22.756Z",
   "posts": [
     {
-      "id": "betting_preview_401752699",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nFlorida Gators (+225) @ LSU Tigers. O/U: 46.5\nSaturday at 12:30 PM CT\n#GoGators #GeauxTigers",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401752699",
-      "expiresAt": "2025-09-13T03:43:09.494Z",
+      "id": "final_401754531",
+      "kind": "final",
+      "priority": 60,
+      "text": "NC State Wolfpack 34 @ Wake Forest Demon Deacons 24 — Final. #CFB\n(NCSU): Hollywood Smothers 24 CAR, 163 YDS\n(WAKE): Robby Ashford 21/35, 252 YDS, 2 INT\n\n#GoPack",
+      "link": "https://www.espn.com/college-football/boxscore/_/gameId/401754531",
+      "expiresAt": "2025-09-13T15:40:23.024Z",
+      "source": "espn"
+    },
+    {
+      "id": "ap_top10_week3",
+      "kind": "poll_top10",
+      "priority": 85,
+      "text": "AP Top 10 - Week 3\n1. Ohio State\n2. Penn State\n3. LSU\n4. Oregon\n5. Miami\n6. Georgia\n7. Texas\n8. Notre Dame\n9. Illinois\n10. Florida State\n\n#APTop25 #CFB",
+      "link": "",
+      "expiresAt": "2025-09-19T03:40:23.200Z",
       "source": "cfbd"
     },
     {
-      "id": "betting_preview_401754623",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nClemson Tigers @ Georgia Tech Yellow Jackets (+136). O/U: 52.5\nSaturday at 5:00 AM CT\n#ALLIN #GoJackets",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401754623",
-      "expiresAt": "2025-09-13T03:43:09.494Z",
+      "id": "ap_movers_week3",
+      "kind": "poll_movers",
+      "priority": 80,
+      "text": "AP Poll Movers - Week 3\n⬇️-8 Michigan (15→23)\n⬆️+7 Tennessee (22→15)\n⬆️+5 Oklahoma (18→13)\n⬆️+5 Utah (25→20)\n⬆️+4 Florida State (14→10)\n⬇️-4 Clemson (8→12)\nNEW: #18 South Florida\nNEW: #24 Auburn\nNEW: #25 Missouri\n\n#APTop25 #CFB",
+      "link": "",
+      "expiresAt": "2025-09-19T03:40:23.201Z",
       "source": "cfbd"
     },
     {
-      "id": "betting_preview_401752705",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nGeorgia Bulldogs @ Middle Tennessee Blue Raiders (+160). O/U: 50.5\nSaturday at 8:30 AM CT\n#GoDawgs #BlueRaiders",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401752705",
-      "expiresAt": "2025-09-13T03:43:09.494Z",
+      "id": "coaches_top10_week3",
+      "kind": "poll_top10",
+      "priority": 85,
+      "text": "Coaches Poll Top 10 - Week 3\n1. Ohio State\n2. Penn State\n3. Georgia\n4. LSU\n5. Oregon\n6. Miami\n7. Texas\n8. Notre Dame\n9. Illinois\n10. South Carolina\n\n#CoachesPoll #CFB",
+      "link": "",
+      "expiresAt": "2025-09-19T03:40:23.247Z",
       "source": "cfbd"
     },
     {
-      "id": "betting_preview_401756893",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nColorado Buffaloes (+160) @ Houston Cougars. O/U: 44.5\nFriday at 12:30 PM CT\n#SkoBuffs #GoCoogs",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401756893",
-      "expiresAt": "2025-09-13T03:43:09.494Z",
+      "id": "coaches_movers_week3",
+      "kind": "poll_movers",
+      "priority": 80,
+      "text": "Coaches Poll Movers - Week 3\n⬇️-14 Arizona State (10→24)\n⬇️-9 Michigan (13→22)\n⬆️+8 Oklahoma (24→16)\n⬆️+7 Florida State (19→12)\n⬆️+5 Texas A&M (22→17)\n⬆️+4 Iowa State (18→14)\n⬆️+3 Illinois (12→9)\nNEW: #21 Utah\nNEW: #23 South Florida\n\n#Coach",
+      "link": "",
+      "expiresAt": "2025-09-19T03:40:23.247Z",
       "source": "cfbd"
     },
     {
-      "id": "betting_preview_401754531",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nNC State Wolfpack @ Wake Forest Demon Deacons (+240). O/U: 52.5\nThursday at 12:30 PM CT\n#GoPack #GoDeacs",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401754531",
-      "expiresAt": "2025-09-13T03:43:09.494Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401756888",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nArkansas State Red Wolves @ Arizona Wildcats (+-105). O/U: 54.5\nFriday at 2:00 PM CT\n#WolvesUp #BearDown",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401756888",
-      "expiresAt": "2025-09-13T03:43:09.494Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401752831",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nOregon Ducks @ Northwestern Wildcats (+2000). O/U: 48.5\nSaturday at 5:00 AM CT\n#GoDucks #GoCats",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401752831",
-      "expiresAt": "2025-09-13T03:43:09.494Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401762817",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nBuffalo Bulls @ Kent State Golden Flashes (+1000). O/U: 48.5\nSaturday at 5:00 AM CT\n#UBhornsUP #FlashFAST",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401762817",
-      "expiresAt": "2025-09-13T03:43:09.495Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401752704",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nVanderbilt Commodores (+140) @ South Carolina Gamecocks. O/U: 48.5\nSaturday at 12:45 PM CT\n#AnchorDown #SpursUp",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401752704",
-      "expiresAt": "2025-09-13T03:43:09.495Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401752832",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nUSC Trojans @ Purdue Boilermakers (+800). O/U: 59.5\nSaturday at 8:30 AM CT\n#FightOn #BoilerUp",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401752832",
-      "expiresAt": "2025-09-13T03:43:09.495Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401762465",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nNavy Midshipmen @ Tulsa Golden Hurricane (+455). O/U: 51.5\nSaturday at 1:00 PM CT\n#GoNavy #ReignCane",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401762465",
-      "expiresAt": "2025-09-13T03:43:09.495Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401752700",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nArkansas Razorbacks (+200) @ Ole Miss Rebels. O/U: 62.5\nSaturday at 12:00 PM CT\n#WPS #HottyToddy",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401752700",
-      "expiresAt": "2025-09-13T03:43:09.496Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401757257",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nNew Mexico State Aggies (+300) @ Louisiana Tech Bulldogs. O/U: 43.5\nSaturday at 12:30 PM CT\n#AggieUp #EverLoyalBe",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401757257",
-      "expiresAt": "2025-09-13T03:43:09.497Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401760368",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nAir Force Falcons @ Utah State Aggies (+164). O/U: 51.5\nSaturday at 2:45 PM CT\n#LetsFly #AggiesAllTheWay",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401760368",
-      "expiresAt": "2025-09-13T03:43:09.497Z",
-      "source": "cfbd"
-    },
-    {
-      "id": "betting_preview_401754533",
-      "kind": "betting_preview",
-      "priority": 90,
-      "text": "Week 3 Preview\nBoston College Eagles @ Stanford Cardinal (+390). O/U: 44.5\nSaturday at 3:30 PM CT\n#WeAreBC #GoStanford",
-      "link": "https://www.espn.com/college-football/game/_/gameId/401754533",
-      "expiresAt": "2025-09-13T03:43:09.497Z",
+      "id": "sp_top10_week3",
+      "kind": "poll_top10",
+      "priority": 85,
+      "text": "SP+ Power Rankings - Week 3\n1. Oregon (26.7)\n2. Ohio State (26.1)\n3. Alabama (25.4)\n4. Georgia (23.4)\n5. Ole Miss (23.1)\n6. Tennessee (22.2)\n7. Penn State (22)\n8. Oklahoma (19.7)\n9. Texas (19.7)\n10. USC (19.1)\n\n#SPPlus #CFB",
+      "link": "",
+      "expiresAt": "2025-09-19T03:40:23.297Z",
       "source": "cfbd"
     }
   ],
