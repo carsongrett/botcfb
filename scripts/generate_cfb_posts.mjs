@@ -4,7 +4,7 @@ import fs from "node:fs";
 // --- CONFIG ---
 const BASE = "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?groups=80";
 const LOOKBACK_DAYS = 5;
-const CFBD_API_KEY = "HE0za3imjd2EFPDvFB/xVjPnoZ7SvGQy80CKZDaP+Zijsos2nYsaMoHg8pLuIS+u";
+const CFBD_API_KEY = "AYkI+Yu/PHFp5lbWxTjrAjN0q4DFidrdJgSoiGvPXve807qSdw0BJ6c08Vf0kFcN";
 const CFBD_BASE = "https://api.collegefootballdata.com";
 
 // --- DATE RANGE (last 5 days) ---
